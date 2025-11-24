@@ -26,7 +26,8 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-es=ik@&te74ribvgsl!lz
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 
-ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '*').split(',')
+# Disable ALLOWED_HOSTS check when DEBUG is False for Railway
+ALLOWED_HOSTS = ['*'] if DEBUG else os.environ.get('ALLOWED_HOSTS', '*').split(',')
 
 
 # Application definition
@@ -126,7 +127,7 @@ STATICFILES_DIRS = [
 
 STORAGES = {
     "staticfiles": {
-        "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
+        "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
     },
 }
 
