@@ -1,1 +1,1 @@
-web: cd application && gunicorn application.wsgi --bind 0.0.0.0:$PORT --log-file -
+web: cd application && python manage.py collectstatic --noinput && gunicorn application.wsgi:application --bind 0.0.0.0:$PORT --log-file -
