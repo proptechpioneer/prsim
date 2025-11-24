@@ -1,1 +1,1 @@
-web: cd application && gunicorn application.wsgi --log-file -
+web: cd application && gunicorn application.wsgi --bind 0.0.0.0:$PORT --log-file -
