@@ -1,0 +1,166 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PRSim | Coming Soon</title>
+    <link rel="icon" type="image/png" href="{% static 'images/icon.png' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anek+Latin:wght@100..800&display=swap" rel="stylesheet">
+    <link href="{% static 'css/output.css' %}" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #000;
+            color: #fff;
+            font-family: 'Anek Latin', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        }
+        
+        .container {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            text-align: center;
+        }
+        
+        #typewriter {
+            font-size: 3rem;
+            line-height: 1.6;
+            max-width: 800px;
+            min-height: 150px;
+            margin-bottom: 1rem;
+        }
+        
+        #logo-section {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            gap: 2rem;
+            animation: fadeIn 1s ease-in;
+        }
+        
+        #logo-section.show {
+            display: flex;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        #logo-section img {
+            max-width: 780px;
+            width: 100%;
+            height: auto;
+        }
+        
+        #contact {
+            font-size: 1.2rem;
+            color: #fff;
+        }
+        
+        #contact a {
+            color: #4a9eff;
+            text-decoration: none;
+        }
+        
+        #contact a:hover {
+            text-decoration: underline;
+        }
+        
+        .cursor {
+            display: inline-block;
+            width: 3px;
+            background-color: #fff;
+            margin-left: 2px;
+            animation: blink 1s infinite;
+        }
+        
+        @keyframes blink {
+            0%, 49% { opacity: 1; }
+            50%, 100% { opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="typewriter"></div>
+        <div id="logo-section">
+            <img src="{% static 'images/prsim_logo.png' %}" alt="PRSim Logo">
+            <div id="contact">
+                To find out more: <a href="mailto:ashley.osborne@prs-im.co.uk">ashley.osborne@prs-im.co.uk</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const messages = [
+            "Do you want to build a society where the next generation has no economic stake - trapped by rising rents, with the prospect of home ownership forever out of reach?",
+            "We don't.",
+            "We are building something different..."
+        ];
+        
+        const typewriterElement = document.getElementById('typewriter');
+        const logoSection = document.getElementById('logo-section');
+        let messageIndex = 0;
+        let charIndex = 0;
+        let isDeleting = false;
+        
+        function type() {
+            const currentMessage = messages[messageIndex];
+            
+            if (!isDeleting && charIndex <= currentMessage.length) {
+                typewriterElement.innerHTML = currentMessage.substring(0, charIndex) + '<span class="cursor">|</span>';
+                charIndex++;
+                
+                if (charIndex > currentMessage.length) {
+                    if (messageIndex === messages.length - 1) {
+                        // Last message - fade out text and show logo
+                        setTimeout(() => {
+                            typewriterElement.style.transition = 'opacity 1s ease-out';
+                            typewriterElement.style.opacity = '0';
+                            setTimeout(() => {
+                                typewriterElement.innerHTML = '';
+                                logoSection.classList.add('show');
+                            }, 1000);
+                        }, 1500);
+                        return;
+                    } else {
+                        // Wait before starting to delete
+                        setTimeout(() => {
+                            isDeleting = true;
+                            type();
+                        }, 2000);
+                        return;
+                    }
+                }
+                
+                setTimeout(type, 80);
+            } else if (isDeleting && charIndex >= 0) {
+                typewriterElement.innerHTML = currentMessage.substring(0, charIndex) + '<span class="cursor">|</span>';
+                charIndex--;
+                
+                if (charIndex < 0) {
+                    isDeleting = false;
+                    messageIndex++;
+                    setTimeout(type, 500);
+                    return;
+                }
+                
+                setTimeout(type, 40);
+            }
+        }
+        
+        // Start typing when page loads
+        window.addEventListener('load', () => {
+            setTimeout(type, 500);
+        });
+    </script>
+</body>
+</html>
